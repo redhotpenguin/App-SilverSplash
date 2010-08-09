@@ -1,0 +1,14 @@
+NAME
+    App::SilverSplash - A network captive portal for Linux platforms.
+
+ABSTRACT
+    See http://dev.slwifi.com/silversplash for information. This module is
+    currently beta status and being polished.
+
+COPYRIGHT AND LICENSE
+    Copyright 2010 Silver Lining Networks. All rights reserved.
+
+    This program is licensed under the Apache 2.0 software license.
+
+    A copy of this license is included in the module distribution.
+

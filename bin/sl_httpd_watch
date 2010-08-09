@@ -1,0 +1,36 @@
+#!/usr/local/bin/perl
+
+eval 'exec /usr/local/bin/perl  -S $0 ${1+"$@"}'
+    if 0; # not running under some shell
+
+use strict;
+use warnings;
+
+my $httpd = "/usr/local/bin/perl /usr/local/bin/sl_cp";
+
+unless ( _is_httpd_running()) {
+    # uh oh, houston we have a problem
+    warn("$$ Uh oh, httpd is not running.  Trying to start it...");
+
+    my $start = `$httpd`; 
+    
+    if ( my $running = _is_httpd_running()) {
+        warn("httpd was started ok: $running");
+	exit(0);
+    } else {
+    	warn("Apache could not be started, giving up.  ALERT ALERT!");
+    }
+
+}
+
+sub _is_httpd_running {
+
+	my $is_httpd_running = `pgrep httpd`;
+	chomp($is_httpd_running);
+
+	return if ($is_httpd_running eq '');
+
+	return $is_httpd_running;
+}
+
+
