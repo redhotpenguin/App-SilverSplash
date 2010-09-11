@@ -191,15 +191,16 @@ NATS
     my $out_rule =
 "-t mangle -A slTRU -m mac --mac-source %s -j MARK $Mark_op $Trusted_mark";
 
-#my $out_rule = "-t mangle -A slTRU -s %s -m mac --mac-source %s -j MARK $Mark_op $Trusted_mark";
-#my $in_rule = "-t mangle -A slINC -d %s -j ACCEPT";
+    # TODO - arp translation
+    #my $out_rule = "-t mangle -A slTRU -s %s -m mac --mac-source %s -j MARK $Mark_op $Trusted_mark";
+    #my $in_rule = "-t mangle -A slINC -d %s -j ACCEPT";
 
     foreach my $mac ( @{$trusted_hosts} ) {
 
-        #my $ip = App::SilverSplash->ip_from_mac($mac);
+        # TODO - arp translation
+        # my $ip = App::SilverSplash->ip_from_mac($mac);
+        # iptables($in_rule, $ip);
         iptables( sprintf( $out_rule, $mac ) );
-
-        #   iptables($in_rule, $ip);
     }
 
 }
@@ -225,15 +226,15 @@ sub clear_firewall {
     # clear all chains
     iptables("-t $_ -X") for keys %tables_chains;
 
-    # reset the postrouting rule
-    #    iptables("-t nat -A POSTROUTING -o $Wan_if -j MASQUERADE");
+    # reset the postrouting rule - unsure if this is needed
+    # iptables("-t nat -A POSTROUTING -o $Wan_if -j MASQUERADE");
 }
 
 sub iptables {
     my $cmd = shift;
     system("sudo $Iptables $cmd") == 0
       or require Carp
-      && Carp::confess "could not iptables '$cmd', err: $!, ret: $?\n";
+      && Carp::confess "could not $Iptables '$cmd', err: $!, ret: $?\n";
 
     return 1;
 }
@@ -386,8 +387,8 @@ sub _ads_chain {
 sub check_overage {
     my ( $class, $mac, $ip ) = @_;
 
-    my $in  = `iptables -t mangle -n -v -x -L slINC`;
-    my $out = `iptables -t mangle -n -v -x -L slOUT`;
+    my $in  = `$Iptables -t mangle -n -v -x -L slINC`;
+    my $out = `$Iptables -t mangle -n -v -x -L slOUT`;
 
     # check the megabyte limits first
     my ($bytes_in) = $in =~ m/\d+\s+(\d+).*?$ip/;

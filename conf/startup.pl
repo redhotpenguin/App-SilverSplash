@@ -10,7 +10,7 @@ $|++;
 
 print "Loading modules...\n";
 
-use SL::Config ();
+use Config::SL ();
 
 our $Config = SL::Config->new();
 

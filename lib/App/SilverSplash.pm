@@ -9,14 +9,31 @@ App::SilverSplash - A network captive portal for Linux platforms.
 
 =head1 ABSTRACT
 
-See http://dev.slwifi.com/silversplash for information.  This
+See http://groups.google.com/group/silversplash for information.  This
 module is currently beta status and being polished.
+
+=head1 DESCRIPTION
+
+Silver Splash is a captive portal for Linux platforms.
+
+Setup is still rough - see the Google Group for discussion of setup.
+
+But there are a few notes being added here.
+
+You will need to add the apache user to /etc/sudoers and give it
+permission to run iptables.  Here's the entry I'm using:
+
+ apache  ALL=NOPASSWD:/sbin/iptables
+
+Adding apache to iptables worked quite well, however I also had to
+comment out
+# Defaults    requiretty
 
 =cut
 
 use constant DEBUG => $ENV{SL_DEBUG} || 0;
 
-our $VERSION = 0.01;
+our $VERSION = 0.02;
 
 use Data::Dumper qw(Dumper);
 
